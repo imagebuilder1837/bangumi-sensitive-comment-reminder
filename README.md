@@ -6,7 +6,7 @@
 
 ![example](res/example.webp)
 
-## [安装](https://github.com/imagebuilder1837/bangumi-sensitive-comment-reminder/blob/main/src/index.user.js?raw=true)
+## [安装](https://raw.githubusercontent.com/imagebuilder1837/bangumi-sensitive-comment-reminder/refs/heads/main/src/index.user.js)
 
 需要浏览器装有 [Tampermonkey](https://tampermonkey.net/) 或 [Violentmonkey](https://violentmonkey.github.io/) 插件
 

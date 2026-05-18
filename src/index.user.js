@@ -1,12 +1,16 @@
 // ==UserScript==
 // @name         Bangumi 简评敏感词提醒
 // @namespace    bangumi-sensitive-comment-reminder
-// @version      0.1.0
+// @version      0.1.1
 // @description  撰写 Bangumi 条目简评时实时检测疑似敏感词并提醒
 // @author       imagebuilder1837
 // @match        https://bgm.tv/*
 // @match        https://bangumi.tv/*
 // @match        https://chii.in/*
+// @run-at       document-end
+// @grant        none
+// @downloadURL  https://raw.githubusercontent.com/imagebuilder1837/bangumi-sensitive-comment-reminder/refs/heads/main/src/index.user.js
+// @updateURL    https://raw.githubusercontent.com/imagebuilder1837/bangumi-sensitive-comment-reminder/refs/heads/main/src/index.user.js
 // ==/UserScript==
 
 "use strict";
