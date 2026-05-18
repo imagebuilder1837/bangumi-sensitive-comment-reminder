@@ -4,7 +4,7 @@
 
 ## 效果
 
-![example](res/example.webp)
+![example](res/example.gif)
 
 ## [安装](https://raw.githubusercontent.com/imagebuilder1837/bangumi-sensitive-comment-reminder/refs/heads/main/src/index.user.js)
 
@@ -20,4 +20,4 @@
 
 ## License
 
-本项目基于 MIT License 开源，详见 [LICENSE](LICENSE) 文件。
+本项目基于 MIT License 开源。详见 [LICENSE](LICENSE) 文件。
