@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bangumi 简评敏感词提醒
 // @namespace    https://github.com/imagebuilder1837/bangumi-sensitive-comment-reminder
-// @version      0.1.2
+// @version      0.1.3
 // @description  撰写 Bangumi 条目简评时实时检测疑似敏感词并提醒
 // @author       imagebuilder1837
 // @match        https://bgm.tv/*
@@ -36,23 +36,27 @@
     return result;
   }
 
-  function mount(dom = document) {
-    const comment = dom.querySelector("#comment");
+  function mount(root = document) {
+    const doc = root.createElement ? root : root.ownerDocument;
+    const comment = root.querySelector("#comment");
+
     if (!comment || comment.dataset.sensitiveReminderMounted) return;
+
+    injectStyle(doc);
 
     comment.dataset.sensitiveReminderMounted = "1";
 
-    const wrapper = dom.createElement("div");
+    const wrapper = doc.createElement("div");
     wrapper.className = "bscr";
     wrapper.hidden = true;
 
-    const head = dom.createElement("button");
+    const head = doc.createElement("button");
     head.type = "button";
     head.className = "bscr-head";
     head.textContent = "敏感词 ⓘ";
     head.addEventListener("click", () => alert(INFO_TEXT));
 
-    const list = dom.createElement("span");
+    const list = doc.createElement("span");
     list.className = "bscr-list";
 
     wrapper.append(head, list);
@@ -65,7 +69,7 @@
       list.textContent = "";
 
       words.forEach((word) => {
-        const item = dom.createElement("button");
+        const item = doc.createElement("button");
         item.type = "button";
         item.className = "bscr-word";
         item.textContent = word;
@@ -93,9 +97,11 @@
   function observeThickbox() {
     new MutationObserver(() => {
       const iframe = document.querySelector("#TB_iframeContent");
-      const body =
-        iframe && iframe.contentDocument && iframe.contentDocument.body;
-      if (body && body.querySelector("#comment")) mount(body);
+      const doc = iframe && iframe.contentDocument;
+
+      if (doc && doc.querySelector("#comment")) {
+        mount(doc);
+      }
     }).observe(document.body, { childList: true, subtree: true });
   }
 
@@ -107,40 +113,44 @@
       );
   }
 
-  function injectStyle() {
-    const style = document.createElement("style");
+  function injectStyle(doc = document) {
+    if (doc.querySelector("#bscr-style")) return;
+
+    const style = doc.createElement("style");
+    style.id = "bscr-style";
     style.textContent = `
-      .bscr {
-        margin: 6px 0 0;
-        font-size: 12px;
-        line-height: 1.8;
-      }
+    .bscr {
+      margin: 6px 0 0;
+      font-size: 12px;
+      line-height: 1.8;
+    }
 
-      .bscr-head,
-      .bscr-word {
-        border: 0;
-        padding: 0;
-        background: transparent;
-        font: inherit;
-        cursor: pointer;
-      }
+    .bscr-head,
+    .bscr-word {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      font: inherit;
+      cursor: pointer;
+    }
 
-      .bscr-head {
-        margin-right: 8px;
-        color: #888;
-      }
+    .bscr-head {
+      margin-right: 8px;
+      color: #888;
+    }
 
-      .bscr-word {
-        margin-right: 8px;
-        color: #f09199;
-        font-weight: bold;
-      }
+    .bscr-word {
+      margin-right: 8px;
+      color: #f09199;
+      font-weight: bold;
+    }
 
-      .bscr-word:hover {
-        text-decoration: underline;
-      }
-    `;
-    document.head.append(style);
+    .bscr-word:hover {
+      text-decoration: underline;
+    }
+  `;
+
+    doc.head.append(style);
   }
 
   async function decryptWords(payload, passphrase) {
@@ -170,7 +180,6 @@
     return Uint8Array.from(atob(base64), (char) => char.charCodeAt(0));
   }
 
-  injectStyle();
   mount(document);
   bindThickboxEntrypoints();
 })();
